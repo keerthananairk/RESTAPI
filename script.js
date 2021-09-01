@@ -1,4 +1,5 @@
 const express = require('express');
+
 const Joi = require('joi');
 const app=express();
 app.use(express.json());
@@ -11,22 +12,24 @@ const customers= [
 
 ]
 
-app.get('/api/customers',(req,res)=>{
+app.get('/api/customers', (req,res)=>{
     res.send(customers);
 });
 
-app.post('/api/customers',(req,res)=>{
-    const {error}=validateCustomer(req.body);
-    if(error){
-        res.status(400).send(error.details[0].message)
+
+app.post('/api/customers', (req,res)=>{
+    const {error}= validateCustomer(req.body);
+    if (error) {
+        res.status(400).send(error.details[0].message);
         return;
     }
     const customer={
-        id:customers.length + 1,
+        id:customer.length + 1,
         title:req.body.title
-    }
-
-})
+    };
+    customers.push(customer);
+    res.send(customer)
+});
 
 function validateCustomer(customer){
     const schema={
@@ -36,5 +39,5 @@ function validateCustomer(customer){
     return Joi.validate(customer,schema);
 }
 
-const port=process.env.PORT||8080;
+const port=process.env.PORT||8085;
 app.listen(port,()=>console.log(`Listening on port ${port}`));
